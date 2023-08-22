@@ -17,6 +17,7 @@ router = APIRouter()
             "description": "Reserva recebida com sucesso",
         },
         status.HTTP_404_NOT_FOUND: {
+            "model": HttpResponseModel,
             "description": "Reserva não encontrada",
         }
     },
@@ -37,6 +38,9 @@ def get_reserva(reserva_id: str):
             "model": HttpResponseModel,
             "description": "Reservas recebida com sucesso",
         },
+        status.HTTP_404_NOT_FOUND: {
+            "detail": "Nenhuma Reserva não encontrada",
+        }
     },
 )
 def get_reservas(
@@ -48,12 +52,12 @@ def get_reservas(
         quarto_individual: bool = False,
         quarto_duplo: bool = False,
         quarto_familiar: bool = False,
-        preço_minimo: float = 0,
-        preço_maximo: float = 99999
+        preco_minimo: float = 0,
+        preco_maximo: float = 99999
     ) -> HttpResponseModel: 
     # reservas_list_response = ReservaService.get_reservas()
     # return reservas_list_response 
 
-    reservas_list_response = ReservaService.get_reservas(nome, classificacao, avaliacao, estado, cidade, quarto_individual, quarto_duplo, quarto_familiar, preço_minimo, preço_maximo)
+    reservas_list_response = ReservaService.get_reservas(nome, classificacao, avaliacao, estado, cidade, quarto_individual, quarto_duplo, quarto_familiar, preco_minimo, preco_maximo)
     
     return reservas_list_response

@@ -1,4 +1,6 @@
 import sys
+
+from fastapi import HTTPException
 from src.schemas.response import HTTPResponses, HttpResponseModel
 from src.db.__init__ import database as db
 
@@ -129,10 +131,7 @@ class ReservaService:
         reservas = filter_reservas_by_price(reservas, min_price, max_price)
         
         if not reservas:
-            return HttpResponseModel(
-                message=HTTPResponses.RESERVA_NOT_FOUND().message,
-                status_code=HTTPResponses.RESERVA_NOT_FOUND().status_code,
-            )
+            raise HTTPException(status_code=404, detail="Nenhuma Reserva encontrada com esses critérios")
         
         return HttpResponseModel(
                 message=HTTPResponses.RESERVA_FOUND().message,
