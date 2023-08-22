@@ -31,7 +31,7 @@ Feature: Busca de Reservas com Filtro
     Then o sistema retorna apenas as seguintes reservas “Resort Muro Alto”, “Porto Seguro Hotel” e “Muro Alto Marulhos”
 
   Scenario: Filtrar reservas pela avaliação dos hóspedes
-    Given  o sistema possui as seguintes opções de reservas cadastradas  “Resort Muro Alto”, “Porto Seguro Hotell”, “Maracabana Spa” e “Muro Alto Marulhos” com os respectivos valores para o campo “Avaliação” “8,3”, “7.8”, “9.5” e “6.7”
+    Given  o sistema possui as seguintes opções de reservas cadastradas  “Resort Muro Alto”, “Porto Seguro Hotell”, “Maracabana Spa” e “Muro Alto Marulhos” com os respectivos valores para o campo “Avaliação” “8.3”, “7.8”, “9.5” e “6.7”
     When  eu peço ao sistema pelas reservas com o campo “Avaliação” com o valor “9”
     Then o sistema retorna apenas a seguinte reserva “Maracabana Spa” com o valor “9.5” para o campo “Avaliação”
 
