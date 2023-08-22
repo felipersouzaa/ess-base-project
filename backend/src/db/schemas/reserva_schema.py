@@ -24,7 +24,7 @@ class ReservaSchema(ModelSchema):
             "description": "Classificação em estrelas de uma reserva"
         },
         "avaliacao": {
-            "bson_type": "int",
+            "bson_type": "double",
             "description": "Media das avaliacoes dos hospedes de uma reserva"
         },
         "estado": {
