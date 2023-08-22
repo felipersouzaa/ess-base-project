@@ -1,9 +1,6 @@
 from fastapi import APIRouter, status
 from src.service.impl.reserva_service import ReservaService
-from src.schemas.reserva import ReservaModel, ReservaList
 from src.schemas.response import HttpResponseModel
-from starlette.responses import JSONResponse
-from src.db import database as db
 
 router = APIRouter()
 
@@ -41,10 +38,10 @@ def get_reserva(reserva_id: str):
         },
     },
 )
-def get_reservas() -> HttpResponseModel: 
+def get_reservas(nome: str = "", classificacao: int = 0, avaliacao: float = 0, estado: str = "", cidade: str = "") -> HttpResponseModel: 
     # reservas_list_response = ReservaService.get_reservas()
     # return reservas_list_response 
 
-    reservas_list_response = ReservaService.get_reservas()
+    reservas_list_response = ReservaService.get_reservas(nome, classificacao, avaliacao, estado, cidade)
     
     return reservas_list_response
