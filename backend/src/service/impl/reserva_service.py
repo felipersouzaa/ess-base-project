@@ -1,4 +1,4 @@
-import json
+import sys
 from src.schemas.response import HTTPResponses, HttpResponseModel
 from src.db.__init__ import database as db
 
@@ -80,6 +80,16 @@ def filter_reservas_by_room_type(reservas: list, individual_room: bool, double_r
                     filtered_reservas.append(reserva)
 
     return filtered_reservas
+
+def filter_reservas_by_price(reservas: list, min_price: float, max_price: float):
+    filtered_reservas = []
+    for reserva in reservas:
+        for quarto in reserva['quartos']:
+            if quarto['preco'] >= min_price and quarto['preco'] <= max_price  and reserva not in filtered_reservas:
+                filtered_reservas.append(reserva)
+                
+
+    return filtered_reservas
 class ReservaService:
 
     @staticmethod
@@ -97,16 +107,27 @@ class ReservaService:
             )
 
     @staticmethod
-    def get_reservas(searchTerm: str = "", classification: int = 0, rating: float = 0, state: str = "", city: str = "", individual_room: bool = False, double_room: bool = False, family_room: bool = False) -> HttpResponseModel:
+    def get_reservas(
+            search_term: str = "",
+            classification: int = 0,
+            rating: float = 0, state: str = "",
+            city: str = "",
+            individual_room: bool = False,
+            double_room: bool = False,
+            family_room: bool = False,
+            min_price: float = 0,
+            max_price: float = sys.float_info.max
+        ) -> HttpResponseModel:
         """Get items method implementation"""
         reservas = db.get_all_items('reservas')
-        reservas = filter_reservas_by_name(reservas, searchTerm)
+        reservas = filter_reservas_by_name(reservas, search_term)
         reservas = filter_reservas_by_classification(reservas, classification)
         reservas = filter_reservas_by_rating(reservas, rating)
         reservas = filter_reservas_by_state(reservas, state)
         reservas = filter_reservas_by_city(reservas, city)
         reservas = filter_reservas_by_room_type(reservas, individual_room, double_room, family_room)
-            
+        reservas = filter_reservas_by_price(reservas, min_price, max_price)
+        
         if not reservas:
             return HttpResponseModel(
                 message=HTTPResponses.RESERVA_NOT_FOUND().message,

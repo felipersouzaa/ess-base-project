@@ -1,3 +1,4 @@
+import sys
 from fastapi import APIRouter, status
 from src.service.impl.reserva_service import ReservaService
 from src.schemas.response import HttpResponseModel
@@ -38,10 +39,21 @@ def get_reserva(reserva_id: str):
         },
     },
 )
-def get_reservas(nome: str = "", classificacao: int = 0, avaliacao: float = 0, estado: str = "", cidade: str = "", quarto_individual: bool = False, quarto_duplo: bool = False, quarto_familiar: bool = False) -> HttpResponseModel: 
+def get_reservas(
+        nome: str = "",
+        classificacao: int = 0,
+        avaliacao: float = 0,
+        estado: str = "",
+        cidade: str = "",
+        quarto_individual: bool = False,
+        quarto_duplo: bool = False,
+        quarto_familiar: bool = False,
+        preço_minimo: float = 0,
+        preço_maximo: float = 99999
+    ) -> HttpResponseModel: 
     # reservas_list_response = ReservaService.get_reservas()
     # return reservas_list_response 
 
-    reservas_list_response = ReservaService.get_reservas(nome, classificacao, avaliacao, estado, cidade, quarto_individual, quarto_duplo, quarto_familiar)
+    reservas_list_response = ReservaService.get_reservas(nome, classificacao, avaliacao, estado, cidade, quarto_individual, quarto_duplo, quarto_familiar, preço_minimo, preço_maximo)
     
     return reservas_list_response
