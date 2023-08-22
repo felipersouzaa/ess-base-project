@@ -34,6 +34,20 @@ class HTTPResponses:
         )
 
     @staticmethod
+    def RESERVA_NOT_FOUND() -> HttpResponseModel:
+        return HttpResponseModel(
+            message="Reserva não encontrada",
+            status_code=404,
+        )
+
+    @staticmethod
+    def RESERVA_FOUND() -> HttpResponseModel:
+        return HttpResponseModel(
+            message="Reserva encontrada com sucesso",
+            status_code=200,
+        )
+
+    @staticmethod
     def SERVER_ERROR() -> HttpResponseModel:
         return HttpResponseModel(
             message="Server error",
