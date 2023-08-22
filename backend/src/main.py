@@ -6,6 +6,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel
 from pymongo.errors import DuplicateKeyError
 from typing import List
+from pydantic import BaseModel, EmailStr, constr
 
 app = FastAPI()
 
@@ -19,21 +20,24 @@ app.add_middleware(
 
 app.include_router(api_router)
 
-app = FastAPI()
+# app = FastAPI()
 
 router = APIRouter()
 
 class UserCreate(BaseModel):
-    nome: str
-    cpf: str
-    email: str
-    endereco: str
-    senha: str
-    telefone: str
+    nome: constr(min_length=1)
+    cpf: constr(min_length=1)
+    email: EmailStr
+    endereco: constr(min_length=1)
+    senha: constr(min_length=1)
+    telefone: constr(min_length=1)
+
+    class Config:
+        anystr_strip_whitespace = True
 
 class UserLogin(BaseModel):
-    email: str
-    senha: str
+    email: EmailStr
+    senha: constr(min_length=1)
 
 class User(BaseModel):
     nome: str
@@ -42,47 +46,50 @@ class User(BaseModel):
     endereco: str
     telefone: str
 
-async def connect_to_mongo():
+def connect_to_mongo():
     client = AsyncIOMotorClient("mongodb://localhost:27017")
     db = client["user_db"]
     return db
 
-async def close_mongo_connection(db):
+def close_mongo_connection(db):
     db.client.close()
 
-async def insert_user(db, user_data: UserCreate):
+def insert_user(db, user_data: UserCreate):
     user_collection = db["users"]
     try:
-        await user_collection.insert_one(user_data.dict())
+        user_collection.insert_one(user_data.dict())
     except DuplicateKeyError:
         raise HTTPException(status_code=400, detail="Email ou CPF já cadastrado")
 
-async def find_user_by_email(db, email: str):
+def find_user_by_email(db, email: str):
     user_collection = db["users"]
-    user_data = await user_collection.find_one({"email": email})
+    user_data = user_collection.find_one({"email": email})
     return user_data
 
-async def find_user_by_cpf(db, cpf: str):
+def find_user_by_cpf(db, cpf: str):
     user_collection = db["users"]
-    user_data = await user_collection.find_one({"cpf": cpf})
+    user_data = user_collection.find_one({"cpf": cpf})
     return user_data
 
-@router.post("/cadastro")
-async def cadastrar_usuario(user: UserCreate, db: AsyncIOMotorClient = Depends(connect_to_mongo)):
-    existing_email_user = await find_user_by_email(db, user.email)
+@router.post("/cadastro/")
+def cadastrar_usuario(user: UserCreate, db: AsyncIOMotorClient = Depends(connect_to_mongo)):
+    if not all(user.dict().values()):
+        raise HTTPException(status_code=400, detail="Campos obrigatórios não preenchidos")
+    
+    existing_email_user = find_user_by_email(db, user.email)
     if existing_email_user:
         raise HTTPException(status_code=400, detail="Email já cadastrado")
 
-    existing_cpf_user = await find_user_by_cpf(db, user.cpf)
+    existing_cpf_user = find_user_by_cpf(db, user.cpf)
     if existing_cpf_user:
         raise HTTPException(status_code=400, detail="CPF já cadastrado")
     
-    await insert_user(db, user)
+    insert_user(db, user)
     return {"message": "Usuário cadastrado com sucesso"}
 
-@router.post("/login")
-async def realizar_login(user: UserLogin, db: AsyncIOMotorClient = Depends(connect_to_mongo)):
-    user_data = await find_user_by_email(db, user.email)
+@router.post("/login/")
+def realizar_login(user: UserLogin, db: AsyncIOMotorClient = Depends(connect_to_mongo)):
+    user_data = find_user_by_email(db, user.email)
     if user_data is None or user_data["senha"] != user.senha:
         raise HTTPException(status_code=401, detail="Credenciais inválidas")
     
