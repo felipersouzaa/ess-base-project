@@ -1,9 +1,11 @@
 fastapi
 uvicorn[standard]
 pydantic
+pydantic[email]
 pymongo
 python-dotenv
 pytest
 pytest-mongodb
 pytest-bdd
 httpx
+motor
