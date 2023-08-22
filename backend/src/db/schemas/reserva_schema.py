@@ -9,6 +9,7 @@ class ReservaSchema(ModelSchema):
         "avaliacao",
         "estado",
         "cidade",
+        "quartos",
     ]
     properties: dict = {
         "id": {
@@ -35,6 +36,10 @@ class ReservaSchema(ModelSchema):
             "bson_type": "string",
             "description": "Cidade onde a reserva esta localizada"
         },
+        "quartos": {
+            "bson_type": "array",
+            "description": "Tipos de quartos disponíveis e o seu respectivo preço"
+        }
     }
     
     def get(self) -> dict:

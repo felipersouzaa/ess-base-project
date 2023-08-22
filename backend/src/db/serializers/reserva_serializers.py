@@ -5,6 +5,7 @@ def reserva_entity(reserva) -> dict:
         "avaliacao": reserva["avaliacao"],
         "estado": reserva["estado"],
         "cidade": reserva["cidade"],
+        "quartos": reserva["quartos"]
     }
 
 def reserva_response_entity(reserva) -> dict:
@@ -15,6 +16,7 @@ def reserva_response_entity(reserva) -> dict:
         "avaliacao": reserva["avaliacao"],
         "estado": reserva["estado"],
         "cidade": reserva["cidade"],
+        "quartos": reserva["quartos"]
     }
 
 def reserva_list_entity(reservas) -> list:
