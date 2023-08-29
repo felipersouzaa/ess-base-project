@@ -120,7 +120,6 @@ class ReservaService:
             min_price: float = 0,
             max_price: float = sys.float_info.max
         ) -> HttpResponseModel:
-        """Get items method implementation"""
         reservas = db.get_all_items('reservas')
         reservas = filter_reservas_by_name(reservas, search_term)
         reservas = filter_reservas_by_classification(reservas, classification)

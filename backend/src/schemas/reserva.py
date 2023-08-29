@@ -23,3 +23,4 @@ class ReservaGet(BaseModel):
 
 class ReservaList(BaseModel):
     reservas: list[ReservaGet]
+
