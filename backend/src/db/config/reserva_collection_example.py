@@ -1,6 +1,5 @@
 RESERVA_COLLECTION_EXAMPLE = [
     {
-        "id": "a07f7e00",
         "nome": "Resort Muro Alto",
         "classificacao": 4,
         "avaliacao": 8.3,
@@ -11,7 +10,6 @@ RESERVA_COLLECTION_EXAMPLE = [
         "descricao": "Localizado na praia de Porto de Galinhas, este hotel disponibiliza uma piscina e espreguiçadeiras no jardim, além de uma sala de jogos."
     },
     {
-        "id": "570f9ae3",
         "nome": "Porto Seguro Hotel",
         "classificacao": 5,
         "avaliacao": 7.8,
@@ -22,7 +20,6 @@ RESERVA_COLLECTION_EXAMPLE = [
         "descricao": "Este hotel situa-se no centro da cidade de Porto Seguro e disponibiliza belas vistas para o Oceano Atlântico, bem como dispõe de uma piscina exterior."
     },
     {
-        "id": "146b373d",
         "nome": "Maracabana Spa",
         "classificacao": 5,
         "avaliacao": 9.5,
@@ -33,7 +30,6 @@ RESERVA_COLLECTION_EXAMPLE = [
         "descricao": "O Maracabana Spa fica a 200 metros das águas animadas da Praia de Taperapuan e apenas a 7 km do centro de Porto Seguro. Possui uma esplêndida piscina e acesso Wi-Fi gratuito."
     },
     {
-        "id": "1ef925f3",
         "nome": "Muro Alto Marulhos",
         "classificacao": 3,
         "avaliacao": 6.7,
