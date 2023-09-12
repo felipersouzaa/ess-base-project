@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import CreateTest from "./app/home/pages/CreateTest";
 import ListTests from "./app/home/pages/ListTests";
+import ReservasPage from "./app/home/pages/Reservas";
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
     path: "/tests",
     Component: ListTests,
   },
+  {
+    path: "reservas",
+    Component: ReservasPage,
+  }
 ]);
 
 export default function App() {
