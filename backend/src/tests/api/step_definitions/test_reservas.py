@@ -54,6 +54,7 @@ def check_response_status_code(context, status_code: str):
     """
     
     assert context["response"].status_code == int(status_code)
+    print(context)
     return context
 
 @then(parsers.cfparse('o JSON da resposta deve ser uma lista de reservas com nome e id'), target_fixture="context")
@@ -267,72 +268,121 @@ def check_reserva_is_in_list(context, reserva_nome: str, reserva_state: str, res
 
 
 # TODO: Rework on this tests later 
-# """ Filtrar reservas pela faixa de preço """
-# @scenario(scenario_name="Filtrar reservas pela faixa de preço", feature_name="../features/reservas.feature")
-# def test_get_reservas_by_price():
-#     """ Get reservas by price """
+""" Filtrar reservas pela faixa de preço """
+@scenario(scenario_name="Filtrar reservas pela faixa de preço", feature_name="../features/reservas.feature")
+def test_get_reservas_by_price():
+    """ Get reservas by price """
 
-# # Step definitions for the "Filtrar reservas pela faixa de preço" scenario
-# @given(parsers.cfparse('o método "get_reservas" do ReservaService com parametro "preco_minimo" com o valor "150" e o parametro "preco_maximo" com o valor "250" e retorna uma lista de reservas'))
-# def mock_reserva_by_classification_response_list():
-#     """
-#     Mock the ReservaService.get_reservas() method to return a list of reservas with price greater than 150 and lesser than 250
-#     """
-#     ReservaService.get_reservas = lambda nome, classificacao, avaliacao, estado, cidade, quarto_individual, quarto_duplo, quarto_familiar, preco_minimo, preco_maximo: HttpResponseModel(
-#         message=HTTPResponses.RESERVA_FOUND().message,
-#         status_code=HTTPResponses.RESERVA_FOUND().status_code,
-#         data=[
-#             {
-#                 "nome": "Resort Muro Alto",
-#                 "quartos": [{"tipo": "Indiviual", "preco":239}, {"tipo": "Duplo", "preco": 299}, {"tipo": "Familiar", "preco": 349}]
-#             },
-#             {
-#                 "nome": "Muro Alto Marulhos",
-#                 "quartos": [{"tipo": "Duplo", "preco": 179}, {"tipo": "Familiar", "preco": 249}]
-#             },
-#         ]
-#     )
+# Step definitions for the "Filtrar reservas pela faixa de preço" scenario
+@given(parsers.cfparse('o método "get_reservas" do ReservaService é chamado com parametro "preco_minimo" com o valor "150" e o parametro "preco_maximo" com o valor "250" e retorna uma lista de reservas'))
+def mock_reserva_by_classification_response_list():
+    """
+    Mock the ReservaService.get_reservas() method to return a list of reservas with price greater than 150 and lesser than 250
+    """
+    ReservaService.get_reservas = lambda nome, classificacao, avaliacao, estado, cidade, quarto_individual, quarto_duplo, quarto_familiar, preco_minimo, preco_maximo: HttpResponseModel(
+        message=HTTPResponses.RESERVA_FOUND().message,
+        status_code=HTTPResponses.RESERVA_FOUND().status_code,
+        data=[
+            {
+                "nome": "Resort Muro Alto",
+                "preco": 239.9
+            },
+            {
+                "nome": "Muro Alto Marulhos",
+                "preco": 179.9 
+            },
+        ]
+    )
 
-# @then(parsers.cfparse('o JSON da resposta deve ser uma lista de reservas com nome e preco'), target_fixture="context")
-# def check_response_json_is_an_reserva_list(context):
-#     """
-#     Check if the response JSON is a list of reservas
-#     """
+@then(parsers.cfparse('o JSON da resposta deve ser uma lista de reservas com nome e preco'), target_fixture="context")
+def check_response_json_is_an_reserva_list(context):
+    """
+    Check if the response JSON is a list of reservas
+    """
 
-#     reservas = get_response_reservas_list(context["response"])
+    reservas = get_response_reservas_list(context["response"])
 
-#     assert isinstance(reservas, list)
-#     for reserva in reservas:
-#         assert isinstance(reserva, dict)
-#         assert "nome" in reserva and isinstance(reserva["nome"], str)
-#         assert "quartos" in reserva and isinstance(reserva["quartos"], list)
-#         for quarto in reserva["quartos"]:
-#             assert "preco" in quarto and isinstance(quarto["preco"], int)
+    assert isinstance(reservas, list)
+    for reserva in reservas:
+        assert isinstance(reserva, dict)
+        assert "nome" in reserva and isinstance(reserva["nome"], str)
+        assert "preco" in reserva and isinstance(reserva["preco"], float)
             
-#     return context
+    return context
 
-# @then(parsers.cfparse('a reserva com nome "{reserva_nome}" e preco "{reserva_preco}" deve estar na lista'), target_fixture="context")
-# def check_reserva_is_in_list(context, reserva_nome: str, reserva_classificacao: int):
-#     """
-#     Check if the reserva with the given name and classification is in the response list
-#     """
-#     reservas = get_response_reservas_list(context["response"])
+@then(parsers.cfparse('a reserva com nome "{reserva_nome}" e preco "{reserva_preco}" deve estar na lista'), target_fixture="context")
+def check_reserva_is_in_list(context, reserva_nome: str, reserva_preco: float):
+    """
+    Check if the reserva with the given name and price is in the response list
+    """
+    reservas = get_response_reservas_list(context["response"])
 
-#     assert {"nome": reserva_nome, "quartos": int(reserva_classificacao)} in reservas
-    
-#     return context
+    assert {"nome": reserva_nome, "preco": float(reserva_preco)} in reservas
+    return context
 
-""" Buscar reservas pelo nome sem resultados """
+""" Filtrar reservas pelo tipo de quarto """
+@scenario(scenario_name="Filtrar reservas pelo tipo de quarto", feature_name="../features/reservas.feature")
+def test_get_reservas_by_room_type():
+    """ Get reservas by price """
+
+# Step definitions for the "Filtrar reservas pelo tipo de quarto" scenario
+@given(parsers.cfparse('o método "get_reservas" do ReservaService é chamado com parametro "quarto_duplo" com o valor "True" e retorna uma lista de reservas'))
+def mock_reserva_by_room_type_list():
+    """
+    Mock the ReservaService.get_reservas() method to return a list of reservas with rooms that includes a double room
+    """
+    ReservaService.get_reservas = lambda nome, classificacao, avaliacao, estado, cidade, quarto_individual, quarto_duplo, quarto_familiar, preco_minimo, preco_maximo: HttpResponseModel(
+        message=HTTPResponses.RESERVA_FOUND().message,
+        status_code=HTTPResponses.RESERVA_FOUND().status_code,
+        data=[
+            {
+                "nome": "Resort Muro Alto",
+                "quartos": "Duplo",
+            },
+            {
+                "nome": "Muro Alto Marulhos",
+                "quartos": "Duplo",
+            },
+        ]
+    )
+
+@then(parsers.cfparse('o JSON da resposta deve ser uma lista de reservas com nome e os tipos de quartos disponíveis'), target_fixture="context")
+def check_response_json_is_an_reserva_list(context):
+    """
+    Check if the response JSON is a list of reservas
+    """
+
+    reservas = get_response_reservas_list(context["response"])
+
+    assert isinstance(reservas, list)
+    for reserva in reservas:
+        assert isinstance(reserva, dict)
+        assert "nome" in reserva and isinstance(reserva["nome"], str)
+        assert "quartos" in reserva and isinstance(reserva["quartos"], str)
+            
+    return context
+
+@then(parsers.cfparse('a reserva com nome "{reserva_nome}" e quartos do tipo "{reserva_tipo_quarto}" deve estar na lista'), target_fixture="context")
+def check_reserva_is_in_list(context, reserva_nome: str, reserva_tipo_quarto: str):
+    """
+    Check if the reserva with the given name and room type is in the response list
+    """
+    reservas = get_response_reservas_list(context["response"])
+
+    assert {"nome": reserva_nome, "quartos": reserva_tipo_quarto} in reservas
+    return context
+
+# """ Buscar reservas pelo nome sem resultados """
 # @scenario(scenario_name="Buscar reservas pelo nome sem resultados", feature_name="../features/reservas.feature")
 # def test_get_reservas_by_name_fail():
 #     """ Get all reservas """
 
-# # Step definitions for the "Retornar todas as Reservas" scenario
+# # # Step definitions for the "Retornar todas as Reservas" scenario
 # @given(parsers.cfparse('o método "get_reservas" do ReservaService é chamado com parametro "nome" com o valor "Pousada"'))
 # def mock_reserva_by_name_fail_response():
-#     """
-#     Mock the ReservaService.get_reservas() method to return a 404 error code
-#     """
+# #     """
+# #     Mock the ReservaService.get_reservas() method to return a 404 error code
+# #     """
 #     ReservaService.get_reservas = lambda nome, classificacao, avaliacao, estado, cidade, quarto_individual, quarto_duplo, quarto_familiar, preco_minimo, preco_maximo: HttpResponseModel(
 #         message=HTTPResponses.RESERVA_NOT_FOUND().message,
 #         status_code=HTTPResponses.RESERVA_NOT_FOUND().status_code,
