@@ -66,6 +66,11 @@
   padding-bottom: 16px;
 }
 
+.loadingContainer {
+  margin: auto;
+  padding-top: 200px
+}
+
 .reservasContainer {
   display: flex;
   flex-direction: column;

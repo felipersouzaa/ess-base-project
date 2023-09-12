@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import styles from "./index.module.css";
 import Select from "react-select";
 import Slider from "@mui/material/Slider";
-import StarRateRoundedIcon from '@mui/icons-material/StarRateRounded';
+import StarRateRoundedIcon from "@mui/icons-material/StarRateRounded";
+import CircularProgress from "@mui/material/CircularProgress";
 import ReservaModel from "../../models/ReservasModel";
 
 const minDistance = 10;
@@ -155,6 +156,12 @@ const ReservasPage = () => {
 
   const ratingCheck = (value: number) => value == rating;
 
+  const getResultsText = (length: number) => {
+    if (length > 0) return `${reservas.length} reservas encontradas`;
+
+    return "Nenhuma reserva encontrada com esses critérios";
+  }
+
   const getRatingText = (rating: number) => {
     if (rating >= 9) return "Fantástico";
     if (rating >= 8) return "Muito Bom";
@@ -184,18 +191,21 @@ const ReservasPage = () => {
         preco_maximo: priceRange[1],
       };
       const { data } = await apiService.get(`/reservas`, { params });
-      const reservaModels = data.data.map((reserva) => new ReservaModel(reserva));
+      const reservaModels = data.data.map(
+        (reserva) => new ReservaModel(reserva)
+      );
       setReservas(reservaModels);
-      setIsLoading(false);
     } catch (error) {
       console.log(error);
       setReservas([]);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
     loadReservas();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getRoomTypes = (reserva) => {
@@ -227,7 +237,7 @@ const ReservasPage = () => {
           <h4 className={styles.filtersHeadline}>Filtrar Reservas por:</h4>
           <div className={styles.filterTypeContainer}>
             <h5 className={styles.filterTitle}>Preço</h5>
-            <div style={{width: "50%", margin: "auto"}}>
+            <div style={{ width: "50%", margin: "auto" }}>
               <Slider
                 min={0}
                 max={1000}
@@ -245,6 +255,7 @@ const ReservasPage = () => {
               value={1}
               onChange={() => handleClassification(1)}
               checked={classificationCheck(1)}
+              disabled={isLoading}
             >
               1 Estrela
             </Checkbox>
@@ -252,6 +263,7 @@ const ReservasPage = () => {
               value={2}
               onChange={() => handleClassification(2)}
               checked={classificationCheck(2)}
+              disabled={isLoading}
             >
               2 Estrelas
             </Checkbox>
@@ -259,6 +271,7 @@ const ReservasPage = () => {
               value={3}
               onChange={() => handleClassification(3)}
               checked={classificationCheck(3)}
+              disabled={isLoading}
             >
               3 Estrelas
             </Checkbox>
@@ -266,6 +279,7 @@ const ReservasPage = () => {
               value={4}
               onChange={() => handleClassification(4)}
               checked={classificationCheck(4)}
+              disabled={isLoading}
             >
               4 Estrelas
             </Checkbox>
@@ -273,19 +287,20 @@ const ReservasPage = () => {
               value={5}
               onChange={() => handleClassification(5)}
               checked={classificationCheck(5)}
+              disabled={isLoading}
             >
               5 Estrelas
             </Checkbox>
           </div>
           <div className={styles.filterTypeContainer}>
             <h5 className={styles.filterTitle}>Tipos de Quarto</h5>
-            <Checkbox onChange={() => setIndvidualRoom(!individualRoom)}>
+            <Checkbox onChange={() => setIndvidualRoom(!individualRoom)} disabled={isLoading}>
               Individual
             </Checkbox>
-            <Checkbox onChange={() => setdoubleRoom(!doubleRoom)}>
+            <Checkbox onChange={() => setdoubleRoom(!doubleRoom)} disabled={isLoading}>
               Duplo
             </Checkbox>
-            <Checkbox onChange={() => setFamilyRoom(!familyRoom)}>
+            <Checkbox onChange={() => setFamilyRoom(!familyRoom)} disabled={isLoading}>
               Familiar
             </Checkbox>
           </div>
@@ -295,6 +310,7 @@ const ReservasPage = () => {
               value={9}
               onChange={() => handleRating(9)}
               checked={ratingCheck(9)}
+              disabled={isLoading}
             >
               Fantástico: 9 ou mais
             </Checkbox>
@@ -302,6 +318,7 @@ const ReservasPage = () => {
               value={8}
               onChange={() => handleRating(8)}
               checked={ratingCheck(8)}
+              disabled={isLoading}
             >
               Muito Bom: 8 ou mais
             </Checkbox>
@@ -309,6 +326,7 @@ const ReservasPage = () => {
               value={7}
               onChange={() => handleRating(7)}
               checked={ratingCheck(7)}
+              disabled={isLoading}
             >
               Bom: 7 ou mais
             </Checkbox>
@@ -316,6 +334,7 @@ const ReservasPage = () => {
               value={6}
               onChange={() => handleRating(6)}
               checked={ratingCheck(6)}
+              disabled={isLoading}
             >
               Satisfatório: 6 ou mais
             </Checkbox>
@@ -327,58 +346,79 @@ const ReservasPage = () => {
           <InputField
             placeholder="Buscar Reservas..."
             onChange={(e) => setSearchTerm(e.target.value)}
-            disabled={false}
+            disabled={isLoading}
           />
-          <Button label="Pesquisar" disabled={false} onClick={handleSearch} />
+          <Button
+            label="Pesquisar"
+            disabled={isLoading}
+            onClick={handleSearch}
+          />
         </div>
-        <h4>{reservas.length} reservas encontradas</h4>
         <div className={styles.reservasContainer}>
-          {reservas?.map((reserva) => (
-            <div className={styles.reservaContainer} key={reserva?.id}>
-              <img className={styles.reservaThumbnail} src={reserva?.imageUrl} />
-              <div className={styles.reservaInfoContainer}>
-                <div className={styles.upperInfo}>
-                  <div className={styles.titleAndClassification}>
-                    <span className={styles.reservaTitle}>{reserva.name}</span>
-                    <div className={styles.classification}>
-                      <span className={styles.classificationText}>{reserva.classification}</span>
-                      <StarRateRoundedIcon />
-                    </div>
-                  </div>
-                  <div className={styles.ratingContainer}>
-                    <div className={styles.ratingTextContainer}>
-                      <span className={styles.reservaRatingText}>
-                        {getRatingText(reserva.rating)}
-                      </span>
-                      <span className={styles.reservasRatingCount}>
-                        {"32 Avaliações"}
-                      </span>
-                    </div>
-                    <div className={styles.rating}>{reserva.rating}</div>
-                  </div>
-                </div>
-                <p className={styles.reservaDescription}>{reserva.description}</p>
-                <div className={styles.reservaLowerInfo}>
-                  <div className={styles.localAndRoomContainer}>
-                    <span className={styles.reservaDetailsText}>
-                      {reserva.city}, {reserva.state}
-                    </span>
-                    <span className={styles.reservaDetailsText}>
-                      Quartos: {getRoomTypes(reserva)}
-                    </span>
-                  </div>
-                  <div className={styles.priceContainerContainer}>
-                    <span className={styles.reservaDetailsText}>
-                      A partir de
-                    </span>
-                    <span className={styles.reservaDetailsText}>
-                      R$ {reserva.rooms[0].price}
-                    </span>
-                  </div>
-                </div>
-              </div>
+          {isLoading ? (
+            <div className={styles.loadingContainer}>
+              <CircularProgress />
             </div>
-          ))}
+          ) : (
+            <>
+              <h4 style={{margin: "auto"}}>{getResultsText(reservas.length)}</h4>
+              {reservas?.map((reserva) => (
+                <div className={styles.reservaContainer} key={reserva?.id}>
+                  <img
+                    className={styles.reservaThumbnail}
+                    src={reserva?.imageUrl}
+                  />
+                  <div className={styles.reservaInfoContainer}>
+                    <div className={styles.upperInfo}>
+                      <div className={styles.titleAndClassification}>
+                        <span className={styles.reservaTitle}>
+                          {reserva.name}
+                        </span>
+                        <div className={styles.classification}>
+                          <span className={styles.classificationText}>
+                            {reserva.classification}
+                          </span>
+                          <StarRateRoundedIcon />
+                        </div>
+                      </div>
+                      <div className={styles.ratingContainer}>
+                        <div className={styles.ratingTextContainer}>
+                          <span className={styles.reservaRatingText}>
+                            {getRatingText(reserva.rating)}
+                          </span>
+                          <span className={styles.reservasRatingCount}>
+                            {"32 Avaliações"}
+                          </span>
+                        </div>
+                        <div className={styles.rating}>{reserva.rating}</div>
+                      </div>
+                    </div>
+                    <p className={styles.reservaDescription}>
+                      {reserva.description}
+                    </p>
+                    <div className={styles.reservaLowerInfo}>
+                      <div className={styles.localAndRoomContainer}>
+                        <span className={styles.reservaDetailsText}>
+                          {reserva.city}, {reserva.state}
+                        </span>
+                        <span className={styles.reservaDetailsText}>
+                          Quartos: {getRoomTypes(reserva)}
+                        </span>
+                      </div>
+                      <div className={styles.priceContainerContainer}>
+                        <span className={styles.reservaDetailsText}>
+                          A partir de
+                        </span>
+                        <span className={styles.reservaDetailsText}>
+                          R$ {reserva.rooms[0].price}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </>
+          )}
         </div>
       </div>
     </div>
