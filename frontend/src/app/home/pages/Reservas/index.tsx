@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import styles from "./index.module.css";
 import Select from "react-select";
 import Slider from "@mui/material/Slider";
-import { reservasMock } from "./reservasMock";
 import StarRateRoundedIcon from '@mui/icons-material/StarRateRounded';
+import ReservaModel from "../../models/ReservasModel";
 
 const minDistance = 10;
 
@@ -112,7 +112,7 @@ const ReservasPage = () => {
   const [individualRoom, setIndvidualRoom] = useState<boolean>(false);
   const [doubleRoom, setdoubleRoom] = useState<boolean>(false);
   const [familyRoom, setFamilyRoom] = useState<boolean>(false);
-  const [reservas, setReservas] = useState(reservasMock);
+  const [reservas, setReservas] = useState<ReservaModel[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const handleClassification = (value: number) => {
@@ -169,6 +169,7 @@ const ReservasPage = () => {
   };
 
   const loadReservas = async () => {
+    setIsLoading(true);
     try {
       const params = {
         nome: searchTerm,
@@ -182,12 +183,13 @@ const ReservasPage = () => {
         preco_minimo: priceRange[0],
         preco_maximo: priceRange[1],
       };
-      console.log(params);
       const { data } = await apiService.get(`/reservas`, { params });
-      console.log(data);
+      const reservaModels = data.data.map((reserva) => new ReservaModel(reserva));
+      setReservas(reservaModels);
       setIsLoading(false);
     } catch (error) {
       console.log(error);
+      setReservas([]);
     }
   };
 
@@ -197,7 +199,7 @@ const ReservasPage = () => {
   }, []);
 
   const getRoomTypes = (reserva) => {
-    const roomTypes = reserva.quartos.map((quarto) => quarto.tipo);
+    const roomTypes = reserva.rooms.map((room) => room.type);
     return roomTypes.join(", ");
   };
 
@@ -331,35 +333,35 @@ const ReservasPage = () => {
         </div>
         <h4>{reservas.length} reservas encontradas</h4>
         <div className={styles.reservasContainer}>
-          {reservas.map((reserva) => (
-            <div className={styles.reservaContainer} key={reserva.id}>
-              <img className={styles.reservaThumbnail} src={reserva.imageUrl} />
+          {reservas?.map((reserva) => (
+            <div className={styles.reservaContainer} key={reserva?.id}>
+              <img className={styles.reservaThumbnail} src={reserva?.imageUrl} />
               <div className={styles.reservaInfoContainer}>
                 <div className={styles.upperInfo}>
                   <div className={styles.titleAndClassification}>
-                    <span className={styles.reservaTitle}>{reserva.nome}</span>
+                    <span className={styles.reservaTitle}>{reserva.name}</span>
                     <div className={styles.classification}>
-                      <span className={styles.classificationText}>{reserva.classificacao}</span>
+                      <span className={styles.classificationText}>{reserva.classification}</span>
                       <StarRateRoundedIcon />
                     </div>
                   </div>
                   <div className={styles.ratingContainer}>
                     <div className={styles.ratingTextContainer}>
                       <span className={styles.reservaRatingText}>
-                        {getRatingText(reserva.avaliacao)}
+                        {getRatingText(reserva.rating)}
                       </span>
                       <span className={styles.reservasRatingCount}>
                         {"32 Avaliações"}
                       </span>
                     </div>
-                    <div className={styles.rating}>{reserva.avaliacao}</div>
+                    <div className={styles.rating}>{reserva.rating}</div>
                   </div>
                 </div>
-                <p className={styles.reservaDescription}>{reserva.descricao}</p>
+                <p className={styles.reservaDescription}>{reserva.description}</p>
                 <div className={styles.reservaLowerInfo}>
                   <div className={styles.localAndRoomContainer}>
                     <span className={styles.reservaDetailsText}>
-                      {reserva.cidade}, {reserva.estado}
+                      {reserva.city}, {reserva.state}
                     </span>
                     <span className={styles.reservaDetailsText}>
                       Quartos: {getRoomTypes(reserva)}
@@ -370,7 +372,7 @@ const ReservasPage = () => {
                       A partir de
                     </span>
                     <span className={styles.reservaDetailsText}>
-                      R$ {reserva.quartos[0].preco}
+                      R$ {reserva.rooms[0].price}
                     </span>
                   </div>
                 </div>
