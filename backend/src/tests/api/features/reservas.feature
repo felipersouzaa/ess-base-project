@@ -35,14 +35,14 @@ Feature: Busca de Reservas com Filtro
     When uma requisição "GET" for enviada para "/reservas/?preço_minimo=150&preço_maximo=250"
     Then o status da resposta deve ser "200"
     And o JSON da resposta deve ser uma lista de reservas com nome e preco
-    And a reserva com nome "Resort Muro Alto" e preco "239" deve estar na lista
-    And a reserva com nome "Muro Alto Marulhos" e preco "179" deve estar na lista
+    And a reserva com nome "Resort Muro Alto" e preco "239.9" deve estar na lista
+    And a reserva com nome "Muro Alto Marulhos" e preco "179.9" deve estar na lista
 
   Scenario: Filtrar reservas pelo tipo de quarto
     Given o método "get_reservas" do ReservaService é chamado com parametro "quarto_duplo" com o valor "True" e retorna uma lista de reservas
     When uma requisição "GET" for enviada para "/reservas/?quarto_duplo=True"
     Then o status da resposta deve ser "200"
-    And o JSON da resposta deve ser uma lista de reservas
+    And o JSON da resposta deve ser uma lista de reservas com nome e os tipos de quartos disponíveis
     And a reserva com nome "Resort Muro Alto" e quartos do tipo "Duplo" deve estar na lista
     And a reserva com nome "Muro Alto Marulhos" e quartos do tipo "Duplo" deve estar na lista
 
