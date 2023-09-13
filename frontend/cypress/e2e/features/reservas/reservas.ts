@@ -1,4 +1,4 @@
-import { Given, Then, When, And } from "@badeball/cypress-cucumber-preprocessor";
+import { Then, When } from "@badeball/cypress-cucumber-preprocessor";
 
 beforeEach(() => {
   cy.visit("localhost:3000");
@@ -131,3 +131,43 @@ Then(
     cy.get('._rating_7nhag_299').should('have.text', rating);
   }
 )
+
+// Scenario: Filtrar reservas pelo local
+// Given: common-step-definitions.ts
+
+When(
+  "preencho o campo {string} com o valor {string}",
+  (stateField: string, stateValue:string) => {
+    const stateDropdown = cy.get(':nth-child(1) > .css-1ba7hqi-control');
+    stateDropdown.should('have.text', stateField);
+    stateDropdown.click();
+    const stateOption = cy.get('#react-select-3-option-1');
+    stateOption.should('have.text', stateValue);
+    stateOption.click();
+  }
+)
+
+When(
+  "preencho o campo {string} com o valor {string} e seleciono a opção {string}",
+  (cityField: string, cityValue:string, searchButton: string) => {
+    const cityDropdown = cy.get(':nth-child(2) > .css-1ba7hqi-control')
+    cityDropdown.should('have.text', cityField);
+    cityDropdown.click();
+    const cityOption = cy.get('#react-select-5-option-1')
+    cityOption.should('have.text', cityValue);
+    cityOption.click();
+    cy.get('[data-cy="searchButton"]').should('have.text', searchButton).click();
+  }
+)
+
+Then(
+  "vejo apenas as seguintes reservas {string} e {string}",
+  (firstReservaTitle: string, secondReservaTitle: string) => {
+    const reservaTitles = cy.get('[data-cy="reservaTitle"]');
+    reservaTitles.should('have.length', 2);
+    reservaTitles.should('include.text', firstReservaTitle);
+    reservaTitles.should('include.text', secondReservaTitle);
+  
+  }
+)
+

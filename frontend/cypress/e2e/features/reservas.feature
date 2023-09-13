@@ -34,3 +34,9 @@ Feature: Busca de Reservas com Filtro
     Given estou na página de "/reservas"
     When seleciono a opção "Pesquisar" com o campo Avaliação dos Hóspedes com o valor "Fantástico: 9 ou mais"
     Then vejo apenas a seguinte reserva "Maracabana Spa" com o valor "9.5" para o campo Avaliação
+
+  Scenario: Filtrar reservas pelo local
+    Given estou na página de "/reservas"
+    When preencho o campo "Estado" com o valor "Bahia"
+    And preencho o campo "Cidade" com o valor "Porto Seguro" e seleciono a opção "Pesquisar" 
+    Then vejo apenas as seguintes reservas "Porto Seguro Hotel" e "Maracabana Spa"
