@@ -34,11 +34,13 @@ const InputField = ({
   disabled = false,
   placeholder = "InputField...",
   onChange,
+  testId
 }) => (
   <input
     disabled={disabled}
     placeholder={placeholder}
     onChange={onChange}
+    data-cy={testId}
     style={{
       flex: 1,
       height: "38px",
@@ -50,10 +52,11 @@ const InputField = ({
   />
 );
 
-const Button = ({ disabled = false, label = "", onClick }) => (
+const Button = ({ disabled = false, label = "", onClick, testId }) => (
   <button
     disabled={disabled}
     onClick={onClick}
+    data-cy={testId}
     style={{
       width: 132,
       height: "38px",
@@ -100,7 +103,7 @@ const selectStyles = {
 };
 
 const apiService = axios.create({
-  baseURL: "http://localhost:8000/",
+  baseURL: "http://127.0.0.1:8000/",
 });
 
 const ReservasPage = () => {
@@ -347,11 +350,13 @@ const ReservasPage = () => {
             placeholder="Buscar Reservas..."
             onChange={(e) => setSearchTerm(e.target.value)}
             disabled={isLoading}
+            testId={"searchInput"}
           />
           <Button
             label="Pesquisar"
             disabled={isLoading}
             onClick={handleSearch}
+            testId={"searchButton"}
           />
         </div>
         <div className={styles.reservasContainer}>
@@ -361,7 +366,7 @@ const ReservasPage = () => {
             </div>
           ) : (
             <>
-              <h4 style={{margin: "auto"}}>{getResultsText(reservas.length)}</h4>
+              <h4 style={{margin: "auto"}} data-cy={"resultsMessage"}>{getResultsText(reservas.length)}</h4>
               {reservas?.map((reserva) => (
                 <div className={styles.reservaContainer} key={reserva?.id}>
                   <img
@@ -371,11 +376,11 @@ const ReservasPage = () => {
                   <div className={styles.reservaInfoContainer}>
                     <div className={styles.upperInfo}>
                       <div className={styles.titleAndClassification}>
-                        <span className={styles.reservaTitle}>
+                        <span className={styles.reservaTitle} data-cy={"reservaTitle"}>
                           {reserva.name}
                         </span>
                         <div className={styles.classification}>
-                          <span className={styles.classificationText}>
+                          <span className={styles.classificationText} data-cy={"classification"}>
                             {reserva.classification}
                           </span>
                           <StarRateRoundedIcon />
