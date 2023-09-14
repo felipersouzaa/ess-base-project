@@ -15,4 +15,6 @@ def get_response_items_list(response):
 def get_response_reservas_list(response):
     return response.json()["data"]
 
+def get_response_avaliacoes_list(response):
+    return response.json()["data"]
 # TODO: create more utils functions

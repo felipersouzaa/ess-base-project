@@ -92,3 +92,11 @@ async def realizar_login(user: UserLogin, db: AsyncIOMotorClient = Depends(conne
         raise HTTPException(status_code=401, detail="Credenciais inválidas")
     
     return {"message": "Login bem-sucedido"}
+
+@app.get("/perfil/{email}/", response_model=User)
+async def get_user_profile(email: EmailStr, db: AsyncIOMotorClient = Depends(connect_to_mongo)):
+    user_data = await find_user_by_email(db, email)
+    if user_data is None:
+        raise HTTPException(status_code=404, detail="Usuário não encontrado")
+    
+    return user_data

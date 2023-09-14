@@ -1,0 +1,87 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; 
+  height: 100vh;
+  overflow-y: auto; 
+  padding-top: 20px; 
+}
+
+.formContainer {
+  width: 100%;
+  max-width: 600px;
+}
+
+.returnButtonContainer {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.returnButton {
+  font-size: 1em; 
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.returnButton:hover {
+  background-color: #0056b3;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.button {
+  height: 50px;
+  width: 150px;
+  font-size: 1em;
+  margin-bottom: 20px;
+}
+
+.RatingName {
+  font-weight: bold;
+  font-size: 1.5em;
+  text-align: center;
+  padding-bottom: 30px;
+}
+
+.inputField {
+  padding: 20px;
+  width: 100%;
+  font-size: 1em;
+  height: 150px;
+  white-space: pre-line;
+  box-sizing: border-box;
+  overflow: auto;
+}
+
+.textareaContainer {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.ratingOptions {
+  display: flex;
+  justify-content: center;
+}
+
+.textBelow {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.categoryContainer {
+  text-align: center;
+  padding-bottom: 10px; 
+}
+
+.radioLabel {
+  margin-right: 10px;
+  padding-bottom: 5px; 
+}

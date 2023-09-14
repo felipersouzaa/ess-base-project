@@ -1,0 +1,80 @@
+.container {
+  text-align: center;
+  padding: 20px;
+  position: relative;
+}
+
+.returnButtonContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 20px;
+}
+
+.scrollContainer {
+  overflow-x: auto;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  margin: 10px;
+  width: 200px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card a {
+  text-decoration: none;
+  color: #000;
+}
+
+.card a:hover {
+  text-decoration: none;
+}
+
+.card p {
+  font-size: 16px;
+  margin: 0;
+}
+
+.place {
+  width: 100px;
+  height: 100px;
+  background-color: #ccc;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px;
+  overflow: hidden;
+}
+
+.returnButton {
+  font-size: 1em;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.returnButton:hover {
+  background-color: #0056b3;
+}
