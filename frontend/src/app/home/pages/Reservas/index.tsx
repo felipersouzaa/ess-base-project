@@ -8,51 +8,10 @@ import StarRateRoundedIcon from "@mui/icons-material/StarRateRounded";
 import CircularProgress from "@mui/material/CircularProgress";
 import ReservaModel from "../../models/ReservasModel";
 import Checkbox from "../../../../shared/components/Checkbox";
+import InputField from "../../../../shared/components/InputField";
+import Button from "../../../../shared/components/Button";
 
 const minDistance = 10;
-
-const InputField = ({
-  disabled = false,
-  placeholder = "InputField...",
-  onChange,
-  testId
-}) => (
-  <input
-    disabled={disabled}
-    placeholder={placeholder}
-    onChange={onChange}
-    data-cy={testId}
-    style={{
-      flex: 1,
-      height: "38px",
-      border: "1px solid",
-      borderColor: "#CCCCCC",
-      borderRadius: "4px",
-      padding: "2px 8px",
-    }}
-  />
-);
-
-const Button = ({ disabled = false, label = "", onClick, testId }) => (
-  <button
-    disabled={disabled}
-    onClick={onClick}
-    data-cy={testId}
-    style={{
-      width: 132,
-      height: "38px",
-      padding: "2px 8px",
-      borderRadius: "4px",
-      backgroundColor: "#006ce4",
-      cursor: "pointer",
-      border: "none",
-    }}
-  >
-    <span style={{ color: "white", fontWeight: 700, fontSize: 16 }}>
-      {label}
-    </span>
-  </button>
-);
 
 const stateOptions = [
   { value: "Pernambuco", label: "Pernambuco" },

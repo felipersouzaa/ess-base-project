@@ -1,14 +1,17 @@
-import { ButtonHTMLAttributes } from "react";
 import styles from "./index.module.css";
 
-type ButtonPros = ButtonHTMLAttributes<HTMLButtonElement>;
+const Button = ({ disabled = false, label = "", onClick, testId }) => (
+  <button
+    disabled={disabled}
+    onClick={onClick}
+    data-cy={testId}
+    className={styles.button}
+  >
+    <span className={styles.buttonLabel}>
+      {label}
+    </span>
+  </button>
+);
 
-const Button = (props: ButtonPros) => {
-  return (
-    <button {...props} className={styles.button}>
-      {props.children}
-    </button>
-  );
-};
 
 export default Button;
