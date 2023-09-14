@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from "axios";
 import { useEffect, useState } from "react";
 import styles from "./index.module.css";
@@ -10,37 +9,7 @@ import ReservaModel from "../../models/ReservasModel";
 import Checkbox from "../../../../shared/components/Checkbox";
 import InputField from "../../../../shared/components/InputField";
 import Button from "../../../../shared/components/Button";
-
-const minDistance = 10;
-
-const stateOptions = [
-  { value: "Pernambuco", label: "Pernambuco" },
-  { value: "Bahia", label: "Bahia" },
-  { value: "São Paulo", label: "São Paulo" },
-];
-
-const cityOptions = [
-  { value: "Ipojuca", label: "Ipojuca" },
-  { value: "Porto Seguro", label: "Porto Seguro" },
-  { value: "São Paulo", label: "São Paulo" },
-];
-
-const menuWidth = 200;
-
-const selectStyles = {
-  control: (css) => ({
-    ...css,
-    width: menuWidth || "auto",
-    opacity: menuWidth ? 1 : 0,
-  }),
-  menu: ({ width, ...css }) => ({
-    ...css,
-    opacity: menuWidth ? 1 : 0,
-    width: menuWidth,
-  }),
-  // Add padding to account for width of Indicators Container plus padding
-  option: (css) => ({ ...css, paddingRight: 36 + 8 }),
-};
+import { SLIDER_MIN_DISTANCE, cityOptions, selectStyles, stateOptions } from "../../utils/reservas";
 
 const apiService = axios.create({
   baseURL: "http://127.0.0.1:8000/",
@@ -84,13 +53,13 @@ const ReservasPage = () => {
 
     if (activeThumb === 0) {
       setPriceRange([
-        Math.min(newValue[0], priceRange[1] - minDistance),
+        Math.min(newValue[0], priceRange[1] - SLIDER_MIN_DISTANCE),
         priceRange[1],
       ]);
     } else {
       setPriceRange([
         priceRange[0],
-        Math.max(newValue[1], priceRange[0] + minDistance),
+        Math.max(newValue[1], priceRange[0] + SLIDER_MIN_DISTANCE),
       ]);
     }
   };
