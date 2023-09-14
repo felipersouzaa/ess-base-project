@@ -173,7 +173,51 @@ class Database():
             "id": str(item_id),
             **item
         }
+
+    # TODO: implement delete_item method
+    def delete_item(self, collection_name: str, item_id: str) -> list:
+        """
+        Delete an item of a collection
+
+        Parameters:
+        - collection_name: str
+            The name of the collection where the item is stored
+        - item_id: str
+            The ID of the item to delete
+
+        Returns:
+        - list:
+            A list of all items in the collection.
+
+        """
+
+        collection: Collection = self.db[collection_name]
+
+        item_id = collection.delete_one(item_id)
+        return {
+            "id": str(item_id),
+            **item_id
+        }
     
+    # TODO: implement update_fav method
+    def update_fav(self, collection_name: str, new_addition: str, user: dict) -> dict:
+        """
+        Update an item in a collection
+
+        Parameters:
+        - collection_name: str
+            The name of the collection where the item is stored
+        - item_id: str
+            The ID of the item to update
+        - item: dict
+            New item data
+
+        Returns:
+        - dict:
+            The updated item
+
+"""
+
     # TODO: implement update_item method
     # def update_item(self, collection_name: str, item_id: str, item: dict) -> dict:
         """
@@ -190,22 +234,5 @@ class Database():
         Returns:
         - dict:
             The updated item
-
-        """
-
-    # TODO: implement delete_item method
-    # def delete_item(self, collection_name: str, item_id: str) -> list:
-        """
-        Delete an item of a collection
-
-        Parameters:
-        - collection_name: str
-            The name of the collection where the item is stored
-        - item_id: str
-            The ID of the item to delete
-
-        Returns:
-        - list:
-            A list of all items in the collection.
 
         """

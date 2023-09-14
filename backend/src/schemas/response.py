@@ -54,5 +54,45 @@ class HTTPResponses:
             status_code=500,
         )
 
+    @staticmethod
+    def AVALIACAO_CREATED() -> HttpResponseModel:
+        return HttpResponseModel(
+            message="Avaliação registrada com sucesso",
+            status_code=201
+        )
 
+    @staticmethod
+    def AVALIACAO_NOT_FOUND() -> HttpResponseModel:
+        return HttpResponseModel(
+            message="Avaliação não encontrada",
+            status_code=404,
+        )
+
+    @staticmethod
+    def AVALIACAO_FOUND() -> HttpResponseModel:
+        return HttpResponseModel(
+            message="Avaliação encontrada com sucesso",
+            status_code=200,
+        )
+
+    @staticmethod
+    def FAVORITO_NOT_FOUND() -> HttpResponseModel:
+        return HttpResponseModel(
+            message="Favoritos não encontrado",
+            status_code=404,
+        )
+
+    @staticmethod
+    def FAVORITO_FOUND() -> HttpResponseModel:
+        return HttpResponseModel(
+            message="Favoritos encontrado com sucesso",
+            status_code=200,
+        )
+
+    @staticmethod
+    def FAVORITO_UPDATED() -> HttpResponseModel:
+        return HttpResponseModel(
+            message="Favoritos atualizados com sucesso",
+            status_code=200,
+        )
     # TODO: implement other responses (item created, updated, deleted, etc)
