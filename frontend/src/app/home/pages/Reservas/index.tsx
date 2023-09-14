@@ -3,13 +3,13 @@ import { useEffect, useState } from "react";
 import styles from "./index.module.css";
 import Select from "react-select";
 import Slider from "@mui/material/Slider";
-import StarRateRoundedIcon from "@mui/icons-material/StarRateRounded";
 import CircularProgress from "@mui/material/CircularProgress";
 import ReservaModel from "../../models/ReservasModel";
 import Checkbox from "../../../../shared/components/Checkbox";
 import InputField from "../../../../shared/components/InputField";
 import Button from "../../../../shared/components/Button";
 import { SLIDER_MIN_DISTANCE, cityOptions, selectStyles, stateOptions } from "../../utils/reservas";
+import ReservaCard from "../../../../shared/components/ReservaCard/Index";
 
 const apiService = axios.create({
   baseURL: "http://127.0.0.1:8000/",
@@ -74,15 +74,6 @@ const ReservasPage = () => {
     return "Nenhuma reserva encontrada com esses critérios";
   }
 
-  const getRatingText = (rating: number) => {
-    if (rating >= 9) return "Fantástico";
-    if (rating >= 8) return "Muito Bom";
-    if (rating >= 7) return "Bom";
-    if (rating >= 6) return "Satisfatório";
-
-    return "";
-  };
-
   const handleSearch = () => {
     loadReservas();
   };
@@ -120,11 +111,6 @@ const ReservasPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const getRoomTypes = (reserva) => {
-    const roomTypes = reserva.rooms.map((room) => room.type);
-    return roomTypes.join(", ");
-  };
-
   return (
     <div className={styles.pageContainer}>
       <div className={styles.leftMenu}>
@@ -158,6 +144,7 @@ const ReservasPage = () => {
                 onChange={handlePrice}
                 valueLabelDisplay="auto"
                 disableSwap
+                data-cy="slider"
               />
             </div>
           </div>
@@ -277,59 +264,7 @@ const ReservasPage = () => {
             <>
               <h4 style={{margin: "auto"}} data-cy={"resultsMessage"}>{getResultsText(reservas.length)}</h4>
               {reservas?.map((reserva) => (
-                <div className={styles.reservaContainer} key={reserva?.id}>
-                  <img
-                    className={styles.reservaThumbnail}
-                    src={reserva?.imageUrl}
-                  />
-                  <div className={styles.reservaInfoContainer}>
-                    <div className={styles.upperInfo}>
-                      <div className={styles.titleAndClassification}>
-                        <span className={styles.reservaTitle} data-cy={"reservaTitle"}>
-                          {reserva.name}
-                        </span>
-                        <div className={styles.classification}>
-                          <span className={styles.classificationText} data-cy={"classification"}>
-                            {reserva.classification}
-                          </span>
-                          <StarRateRoundedIcon />
-                        </div>
-                      </div>
-                      <div className={styles.ratingContainer}>
-                        <div className={styles.ratingTextContainer}>
-                          <span className={styles.reservaRatingText}>
-                            {getRatingText(reserva.rating)}
-                          </span>
-                          <span className={styles.reservasRatingCount}>
-                            {"32 Avaliações"}
-                          </span>
-                        </div>
-                        <div className={styles.rating}>{reserva.rating}</div>
-                      </div>
-                    </div>
-                    <p className={styles.reservaDescription}>
-                      {reserva.description}
-                    </p>
-                    <div className={styles.reservaLowerInfo}>
-                      <div className={styles.localAndRoomContainer}>
-                        <span className={styles.reservaDetailsText}>
-                          {reserva.city}, {reserva.state}
-                        </span>
-                        <span className={styles.reservaDetailsText}>
-                          Quartos: {getRoomTypes(reserva)}
-                        </span>
-                      </div>
-                      <div className={styles.priceContainerContainer}>
-                        <span className={styles.reservaDetailsText}>
-                          A partir de
-                        </span>
-                        <span className={styles.reservaDetailsText}>
-                          R$ {reserva.rooms[0].price}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <ReservaCard key={reserva.id} reserva={reserva} />
               ))}
             </>
           )}

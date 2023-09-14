@@ -78,7 +78,7 @@ Then(
 When(
   "seleciono a opção {string} com o campo {string} com o valor {string} e o campo {string} com o valor {string}",
   (searchButton: string, minimumPriceField: string, maximumPriceField: string, minimumPriceValue: string, maximumPriceValue: string) => {
-    const minPriceArrows = '{rightArrow}'.repeat(10); 
+    const minPriceArrows = '{rightArrow}'.repeat(3); 
     cy.get('[style="left: 0%;"]').click({ multiple: true, force: true }).type(minPriceArrows);
     cy.get('[style="left: 100%;"]').click({ multiple: true, force: true }).type('{leftArrow}'.repeat(10));
     cy.get('[data-cy="searchButton"]').should('have.text', searchButton).click();
@@ -115,7 +115,7 @@ Then(
 When(
   "seleciono a opção {string} com o campo Avaliação dos Hóspedes com o valor {string}",
   (searchButton: string, rating: string) => {
-    const fantasticCheckbox = cy.get('._filtersContainer_7nhag_55 > :nth-child(5) > :nth-child(2)')
+    const fantasticCheckbox = cy.get('._filtersContainer_13qlj_55 > :nth-child(5) > :nth-child(2)');
     fantasticCheckbox.should('have.text', rating);
     fantasticCheckbox.click();
     cy.get('[data-cy="searchButton"]').should('have.text', searchButton).click();
@@ -128,7 +128,7 @@ Then(
     const reservaTitles = cy.get('[data-cy="reservaTitle"]');
     reservaTitles.should('have.length', 1);
     reservaTitles.should('include.text', reservaTitle);
-    cy.get('._rating_7nhag_299').should('have.text', rating);
+    cy.get('._rating_16jlb_139').should('have.text', rating);
   }
 )
 
@@ -150,7 +150,7 @@ When(
 When(
   "preencho o campo {string} com o valor {string} e seleciono a opção {string}",
   (cityField: string, cityValue:string, searchButton: string) => {
-    const cityDropdown = cy.get(':nth-child(2) > .css-1ba7hqi-control')
+    const cityDropdown = cy.get(':nth-child(2) > .css-1ba7hqi-control');
     cityDropdown.should('have.text', cityField);
     cityDropdown.click();
     const cityOption = cy.get('#react-select-5-option-1')
@@ -167,7 +167,6 @@ Then(
     reservaTitles.should('have.length', 2);
     reservaTitles.should('include.text', firstReservaTitle);
     reservaTitles.should('include.text', secondReservaTitle);
-  
   }
 )
 
