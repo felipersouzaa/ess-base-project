@@ -1,6 +1,28 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import styles from "./index.module.css";
+
+// Componente reutilizável para campos de entrada
+function InputField({ id, name, type, value, onChange, required, label }) {
+  return (
+    <div>
+      <label htmlFor={id}>{label}:</label>
+      <input
+        type={type}
+        id={id}
+        name={name}
+        value={value}
+        onChange={onChange}
+        required={required}
+      />
+    </div>
+  );
+}
+
+// Componente reutilizável para formulários
+function Form({ onSubmit, children }) {
+  return <form onSubmit={onSubmit}>{children}</form>;
+}
 
 function App() {
   const [cadastroData, setCadastroData] = useState({
@@ -60,102 +82,86 @@ function App() {
   return (
     <div className={styles.body}>
       <h2>Cadastro</h2>
-      <form onSubmit={handleCadastroSubmit}>
-        <div>
-          <label htmlFor="nome">Nome:</label>
-          <input
-            type="text"
-            id="nome"
-            name="nome"
-            value={cadastroData.nome}
-            onChange={handleCadastroChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="cpf">CPF:</label>
-          <input
-            type="text"
-            id="cpf"
-            name="cpf"
-            value={cadastroData.cpf}
-            onChange={handleCadastroChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input
-            type="text"
-            id="email"
-            name="email"
-            value={cadastroData.email}
-            onChange={handleCadastroChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="endereco">Endereço:</label>
-          <input
-            type="text"
-            id="endereco"
-            name="endereco"
-            value={cadastroData.endereco}
-            onChange={handleCadastroChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="telefone">Telefone:</label>
-          <input
-            type="text"
-            id="telefone"
-            name="telefone"
-            value={cadastroData.telefone}
-            onChange={handleCadastroChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="senha">Senha:</label>
-          <input
-            type="text"
-            id="senha"
-            name="senha"
-            value={cadastroData.senha}
-            onChange={handleCadastroChange}
-            required
-          />
-        </div>
+      <Form onSubmit={handleCadastroSubmit}>
+        <InputField
+          id="nome"
+          name="nome"
+          type="text"
+          value={cadastroData.nome}
+          onChange={handleCadastroChange}
+          required
+          label="Nome"
+        />
+        <InputField
+          id="cpf"
+          name="cpf"
+          type="text"
+          value={cadastroData.cpf}
+          onChange={handleCadastroChange}
+          required
+          label="CPF"
+        />
+        <InputField
+          id="email"
+          name="email"
+          type="text"
+          value={cadastroData.email}
+          onChange={handleCadastroChange}
+          required
+          label="Email"
+        />
+        <InputField
+          id="endereco"
+          name="endereco"
+          type="text"
+          value={cadastroData.endereco}
+          onChange={handleCadastroChange}
+          required
+          label="Endereço"
+        />
+        <InputField
+          id="telefone"
+          name="telefone"
+          type="text"
+          value={cadastroData.telefone}
+          onChange={handleCadastroChange}
+          required
+          label="Telefone"
+        />
+        <InputField
+          id="senha"
+          name="senha"
+          type="password"
+          value={cadastroData.senha}
+          onChange={handleCadastroChange}
+          required
+          label="Senha"
+        />
         <button type="submit">Cadastrar</button>
-      </form>
+      </Form>
 
       <h2>Login</h2>
-      <form onSubmit={handleLoginSubmit}>
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={loginData.email}
-            onChange={handleLoginChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="senha">Senha:</label>
-          <input
-            type="password"
-            id="senha"
-            name="senha"
-            value={loginData.senha}
-            onChange={handleLoginChange}
-            required
-          />
-        </div>
+      <Form onSubmit={handleLoginSubmit}>
+        <InputField
+          id="email"
+          name="email"
+          type="email"
+          value={loginData.email}
+          onChange={handleLoginChange}
+          required
+          label="Email"
+        />
+        <InputField
+          id="senha"
+          name="senha"
+          type="password"
+          value={loginData.senha}
+          onChange={handleLoginChange}
+          required
+          label="Senha"
+        />
         <button type="submit">Entrar</button>
-      </form>
+      </Form>
 
       {message && <p>{message}</p>}
     </div>
