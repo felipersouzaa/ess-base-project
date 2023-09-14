@@ -1,106 +1,15 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from "axios";
 import { useEffect, useState } from "react";
 import styles from "./index.module.css";
 import Select from "react-select";
 import Slider from "@mui/material/Slider";
-import StarRateRoundedIcon from "@mui/icons-material/StarRateRounded";
 import CircularProgress from "@mui/material/CircularProgress";
 import ReservaModel from "../../models/ReservasModel";
-
-const minDistance = 10;
-
-const Checkbox = ({
-  children,
-  value,
-  checked,
-  onChange,
-  ...props
-}: JSX.IntrinsicElements["input"]) => (
-  <label style={{ display: "flex", alignItems: "center", paddingLeft: "8px" }}>
-    <input
-      type="checkbox"
-      checked={checked}
-      value={value}
-      onChange={onChange}
-      {...props}
-      style={{ width: "18px", height: "18px", marginRight: "12px" }}
-    />
-    {children}
-  </label>
-);
-
-const InputField = ({
-  disabled = false,
-  placeholder = "InputField...",
-  onChange,
-  testId
-}) => (
-  <input
-    disabled={disabled}
-    placeholder={placeholder}
-    onChange={onChange}
-    data-cy={testId}
-    style={{
-      flex: 1,
-      height: "38px",
-      border: "1px solid",
-      borderColor: "#CCCCCC",
-      borderRadius: "4px",
-      padding: "2px 8px",
-    }}
-  />
-);
-
-const Button = ({ disabled = false, label = "", onClick, testId }) => (
-  <button
-    disabled={disabled}
-    onClick={onClick}
-    data-cy={testId}
-    style={{
-      width: 132,
-      height: "38px",
-      padding: "2px 8px",
-      borderRadius: "4px",
-      backgroundColor: "#006ce4",
-      cursor: "pointer",
-      border: "none",
-    }}
-  >
-    <span style={{ color: "white", fontWeight: 700, fontSize: 16 }}>
-      {label}
-    </span>
-  </button>
-);
-
-const stateOptions = [
-  { value: "Pernambuco", label: "Pernambuco" },
-  { value: "Bahia", label: "Bahia" },
-  { value: "São Paulo", label: "São Paulo" },
-];
-
-const cityOptions = [
-  { value: "Ipojuca", label: "Ipojuca" },
-  { value: "Porto Seguro", label: "Porto Seguro" },
-  { value: "São Paulo", label: "São Paulo" },
-];
-
-const menuWidth = 200;
-
-const selectStyles = {
-  control: (css) => ({
-    ...css,
-    width: menuWidth || "auto",
-    opacity: menuWidth ? 1 : 0,
-  }),
-  menu: ({ width, ...css }) => ({
-    ...css,
-    opacity: menuWidth ? 1 : 0,
-    width: menuWidth,
-  }),
-  // Add padding to account for width of Indicators Container plus padding
-  option: (css) => ({ ...css, paddingRight: 36 + 8 }),
-};
+import Checkbox from "../../../../shared/components/Checkbox";
+import InputField from "../../../../shared/components/InputField";
+import Button from "../../../../shared/components/Button";
+import { SLIDER_MIN_DISTANCE, cityOptions, selectStyles, stateOptions } from "../../utils/reservas";
+import ReservaCard from "../../../../shared/components/ReservaCard/Index";
 
 const apiService = axios.create({
   baseURL: "http://127.0.0.1:8000/",
@@ -144,13 +53,13 @@ const ReservasPage = () => {
 
     if (activeThumb === 0) {
       setPriceRange([
-        Math.min(newValue[0], priceRange[1] - minDistance),
+        Math.min(newValue[0], priceRange[1] - SLIDER_MIN_DISTANCE),
         priceRange[1],
       ]);
     } else {
       setPriceRange([
         priceRange[0],
-        Math.max(newValue[1], priceRange[0] + minDistance),
+        Math.max(newValue[1], priceRange[0] + SLIDER_MIN_DISTANCE),
       ]);
     }
   };
@@ -164,15 +73,6 @@ const ReservasPage = () => {
 
     return "Nenhuma reserva encontrada com esses critérios";
   }
-
-  const getRatingText = (rating: number) => {
-    if (rating >= 9) return "Fantástico";
-    if (rating >= 8) return "Muito Bom";
-    if (rating >= 7) return "Bom";
-    if (rating >= 6) return "Satisfatório";
-
-    return "";
-  };
 
   const handleSearch = () => {
     loadReservas();
@@ -211,11 +111,6 @@ const ReservasPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const getRoomTypes = (reserva) => {
-    const roomTypes = reserva.rooms.map((room) => room.type);
-    return roomTypes.join(", ");
-  };
-
   return (
     <div className={styles.pageContainer}>
       <div className={styles.leftMenu}>
@@ -249,6 +144,7 @@ const ReservasPage = () => {
                 onChange={handlePrice}
                 valueLabelDisplay="auto"
                 disableSwap
+                data-cy="slider"
               />
             </div>
           </div>
@@ -368,59 +264,7 @@ const ReservasPage = () => {
             <>
               <h4 style={{margin: "auto"}} data-cy={"resultsMessage"}>{getResultsText(reservas.length)}</h4>
               {reservas?.map((reserva) => (
-                <div className={styles.reservaContainer} key={reserva?.id}>
-                  <img
-                    className={styles.reservaThumbnail}
-                    src={reserva?.imageUrl}
-                  />
-                  <div className={styles.reservaInfoContainer}>
-                    <div className={styles.upperInfo}>
-                      <div className={styles.titleAndClassification}>
-                        <span className={styles.reservaTitle} data-cy={"reservaTitle"}>
-                          {reserva.name}
-                        </span>
-                        <div className={styles.classification}>
-                          <span className={styles.classificationText} data-cy={"classification"}>
-                            {reserva.classification}
-                          </span>
-                          <StarRateRoundedIcon />
-                        </div>
-                      </div>
-                      <div className={styles.ratingContainer}>
-                        <div className={styles.ratingTextContainer}>
-                          <span className={styles.reservaRatingText}>
-                            {getRatingText(reserva.rating)}
-                          </span>
-                          <span className={styles.reservasRatingCount}>
-                            {"32 Avaliações"}
-                          </span>
-                        </div>
-                        <div className={styles.rating}>{reserva.rating}</div>
-                      </div>
-                    </div>
-                    <p className={styles.reservaDescription}>
-                      {reserva.description}
-                    </p>
-                    <div className={styles.reservaLowerInfo}>
-                      <div className={styles.localAndRoomContainer}>
-                        <span className={styles.reservaDetailsText}>
-                          {reserva.city}, {reserva.state}
-                        </span>
-                        <span className={styles.reservaDetailsText}>
-                          Quartos: {getRoomTypes(reserva)}
-                        </span>
-                      </div>
-                      <div className={styles.priceContainerContainer}>
-                        <span className={styles.reservaDetailsText}>
-                          A partir de
-                        </span>
-                        <span className={styles.reservaDetailsText}>
-                          R$ {reserva.rooms[0].price}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <ReservaCard key={reserva.id} reserva={reserva} />
               ))}
             </>
           )}

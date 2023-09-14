@@ -20,10 +20,10 @@ Feature: Busca de Reservas com Filtro
     Then vejo a reserva "Porto Seguro Hotel" com o valor "5" para o Campo "Classificação"
     And vejo a reserva "Maracabana Spa" com o valor "5" para o Campo "Classificação"
 
-  # Scenario: Filtrar reservas pela faixa de preço
-  #   Given estou na página de "/reservas"
-  #   When seleciono a opção "Pesquisar" com o campo "Preço Mínimo" com o valor "150" e o campo "Preço Máximo" com o valor "250"
-  #   Then vejo apenas as seguintes reservas "Resort Muro Alto" e "Muro Alto Marulhos" com os respectivos valores para o campo "Preço" "R$ 239" e "R$ 179"
+  Scenario: Filtrar reservas pela faixa de preço
+    Given estou na página de "/reservas"
+    When seleciono a opção "Pesquisar" com o campo "Preço Mínimo" com o valor "150" e o campo "Preço Máximo" com o valor "250"
+    Then vejo apenas as seguintes reservas "Resort Muro Alto" e "Muro Alto Marulhos" com os respectivos valores para o campo "Preço" "R$ 239" e "R$ 179"
 
   Scenario: Filtrar reservas pelo tipo de quarto
     Given estou na página de "/reservas"

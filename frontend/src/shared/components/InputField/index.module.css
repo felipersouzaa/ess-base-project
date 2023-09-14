@@ -1,0 +1,7 @@
+.inputField {
+  flex: 1;
+  height: 38px;
+  border: 1px solid #CCCCCC;
+  border-radius: 4px;
+  padding: 2px 8px;
+}
