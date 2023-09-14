@@ -2,12 +2,9 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import CreateTest from "./app/home/pages/CreateTest";
 import ListTests from "./app/home/pages/ListTests";
 import ReservasPage from "./app/home/pages/Reservas";
-<<<<<<< Updated upstream
 import CadastroLogin from "./app/home/pages/Cadastro_Login";
-=======
 import AvaliaPage from "./app/home/pages/Avalia";
 import UserHistoryList from "./app/home/pages/Favorito"
->>>>>>> Stashed changes
 
 const router = createBrowserRouter([
   {
@@ -23,25 +20,24 @@ const router = createBrowserRouter([
     Component: ListTests,
   },
   {
-    path: "reservas",
+    path: "/reservas",
     Component: ReservasPage,
   },
   {
-<<<<<<< Updated upstream
     path: "cadastro",
     Component: CadastroLogin,
   },
   {
     path: "login",
     Component: CadastroLogin,
-=======
+  },
+  {
     path: "/Avalia",
     Component: AvaliaPage,
   },
   {
     path: "/Favorito",
     Component: UserHistoryList
->>>>>>> Stashed changes
   }
 ]);
 
