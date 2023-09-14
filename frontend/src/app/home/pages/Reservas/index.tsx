@@ -7,28 +7,9 @@ import Slider from "@mui/material/Slider";
 import StarRateRoundedIcon from "@mui/icons-material/StarRateRounded";
 import CircularProgress from "@mui/material/CircularProgress";
 import ReservaModel from "../../models/ReservasModel";
+import Checkbox from "../../../../shared/components/Checkbox";
 
 const minDistance = 10;
-
-const Checkbox = ({
-  children,
-  value,
-  checked,
-  onChange,
-  ...props
-}: JSX.IntrinsicElements["input"]) => (
-  <label style={{ display: "flex", alignItems: "center", paddingLeft: "8px" }}>
-    <input
-      type="checkbox"
-      checked={checked}
-      value={value}
-      onChange={onChange}
-      {...props}
-      style={{ width: "18px", height: "18px", marginRight: "12px" }}
-    />
-    {children}
-  </label>
-);
 
 const InputField = ({
   disabled = false,
