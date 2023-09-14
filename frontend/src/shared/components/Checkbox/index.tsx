@@ -5,6 +5,7 @@ const Checkbox = ({
   value,
   checked,
   onChange,
+  disabled,
   ...props
 }: JSX.IntrinsicElements["input"]) => (
   <label className={styles.checkboxLabel}>
