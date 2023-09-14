@@ -43,9 +43,9 @@ const UserHistoryPage: React.FC = () => {
       <div className={styles.returnButtonContainer}>
         <button className={styles.returnButton} onClick={() => window.history.back()}>Retornar</button>
       </div>
-      <h1>Favoritos</h1>
+      <h1 className={styles.title}>Favoritos</h1>
       <div className={styles.scrollContainer}>
-        <div className={styles['card-container']}>
+        <div className={styles['scrollable-card-container']}>
           {history.map(item => (
             <div key={item.id} className={styles.card}>
               <div className={styles.place}>
